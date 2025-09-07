@@ -17,4 +17,4 @@ Server (your side) Base64-decodes, splits IV/ciphertext, and decrypts with the s
 
 ...............how to run this project ...............>
 
-just clone this project into your andorid studio and run
+just clone this repo into your andorid studio and run
