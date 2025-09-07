@@ -42,7 +42,7 @@ static bool get_random_iv(uint8_t iv[16]) {
 extern "C"
 JNIEXPORT jbyteArray JNICALL
 Java_com_loc_kotlinassignmentproject_crypto_NativeCrypto_encryptForAuthKey(
-        JNIEnv* env, jclass, jbyteArray plaintext_) {
+        JNIEnv* env, jobject , jbyteArray plaintext_) {
     jsize in_len = env->GetArrayLength(plaintext_);
     std::vector<uint8_t> in(in_len);
     env->GetByteArrayRegion(plaintext_, 0, in_len, reinterpret_cast<jbyte*>(in.data()));

@@ -7,8 +7,13 @@ import okhttp3.Response
 
 class AuthKeyInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val plainKey = "my-secret-key".toByteArray()
-        val encrypted = CryptoProvider.engine.encryptForAuthKey(plainKey)
+        val req = chain.request()
+        val ts = System.currentTimeMillis()
+        val method = req.method.uppercase()
+        val path = req.url.encodedPath
+
+        val payload = "$ts:$method:$path".toByteArray(Charsets.UTF_8)
+        val encrypted = CryptoProvider.engine.encryptForAuthKey(payload)
         val authKey = Base64.encodeToString(encrypted, Base64.NO_WRAP)
 
         val newReq = chain.request().newBuilder()
