@@ -13,3 +13,8 @@ Kotlin Base64-encodes those bytes → AuthKey.
 OkHttp Interceptor injects:
 AuthKey: <base64(IV||CT)>
 Server (your side) Base64-decodes, splits IV/ciphertext, and decrypts with the same key.
+
+
+...............how to run this project ...............>
+
+just clone this project into your andorid studio and run
