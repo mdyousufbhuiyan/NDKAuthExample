@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")       // Kapt plugin
+    alias(libs.plugins.hilt)              // Hilt plugin
 }
 
 
@@ -17,13 +19,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Native build flags
         externalNativeBuild {
             cmake {
-                cppFlags += "-std=c++17"
+                cFlags += "-std=c11" // ✅ correct flag for C
             }
         }
 
-        // Needed to let JNI find our .so at runtime
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
         }
@@ -70,7 +72,7 @@ android {
 }
 
 dependencies {
-
+    // Jetpack Compose & AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -79,7 +81,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.runtime.livedata)
+
+    implementation(libs.javapoet)
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,23 +93,44 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp)
+
+
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+
+    // Lifecycle / MVVM
+    implementation(libs.androidx.lifecycle.runtime.ktx.v284)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Navigation (optional)
+    implementation(libs.androidx.navigation.compose)
+
+    // Hilt
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose.v120)
+
+
+    // ✅ Hilt dependencies
+//    implementation(libs.hilt.android)
+//    kapt(libs.hilt.compiler)
+//    implementation(libs.hilt.navigation.compose)
+    // Retrofit / OkHttp
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
-    implementation(libs.moshi.kotlin)
-    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
+    // Moshi
+    implementation(libs.moshi)
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
-//    // For unit tests
-//    testImplementation(libs.junit)
-//    testImplementation(libs.mockwebserver)
+    // Security / Crypto
+    implementation(libs.androidx.security.crypto)
 
-    testImplementation (libs.robolectric)
-//    testImplementation(libs.mockwebserver.v4110)
-    // OkHttp MockWebServer for HTTP testing
-    testImplementation(libs.mockwebserver)
-    androidTestImplementation(libs.androidx.junit.v121)
-    androidTestImplementation(libs.androidx.espresso.core.v361)
-    androidTestImplementation(libs.mockwebserver)
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
 }

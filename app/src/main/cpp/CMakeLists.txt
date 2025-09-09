@@ -1,23 +1,25 @@
 cmake_minimum_required(VERSION 3.22.1)
-
-project("kotlinassignmentproject")
+project(apikeyencryption)
 
 add_library(
-        native-crypto
+        native-lib
         SHARED
-        native-crypto.cpp
-        base64.c
-        vendor/tiny-aes-c/aes.c
+        native-lib.c
+        aes.c
 )
 
-target_include_directories(native-crypto PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/tiny-aes-c
+find_library(
+        log-lib
+        log
 )
-
-find_library(log-lib log)
 
 target_link_libraries(
-        native-crypto
+        native-lib
         ${log-lib}
+)
+
+target_include_directories(
+        native-lib
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )

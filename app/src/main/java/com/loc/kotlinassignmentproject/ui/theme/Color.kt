@@ -1,4 +1,4 @@
-package com.loc.kotlinassignmentproject.theme
+package com.loc.apikeyencritiopdemp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
